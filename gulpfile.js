@@ -4,7 +4,9 @@ const gulp = require('gulp')
     , sass = require('gulp-sass')
     , spritesmith = require('gulp.spritesmith')
     , rimraf = require('rimraf')
-    , rename = require('gulp-rename');
+    , rename = require('gulp-rename')
+    , prefixer = require('gulp-autoprefixer')
+    , sourcemaps = require('gulp-sourcemaps');
 
 /* ----------- Server --------- */
 gulp.task('server', function() {
@@ -31,8 +33,11 @@ gulp.task('templates:compile', function() {
 /* ----------- Styles compile --------- */
 gulp.task('styles:compile', function() {
   return gulp.src('source/styles/main.scss')
+    .pipe(sourcemaps.init())
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(prefixer())
     .pipe(rename('main.min.css'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('build/css'))
 });
 
